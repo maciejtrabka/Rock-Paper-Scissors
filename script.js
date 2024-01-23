@@ -1,18 +1,32 @@
-console.log("Hello. It's a rock, paper, scissors game! ");
+let computerScore = 0;
+let playerScore = 0;
+let index = 0;
+const gameWinnerContainer = document.querySelector("h5");
+const playerScoreContainer = document.querySelector("#playerScore");
+const computerScoreContainer = document.querySelector("#computerScore");
+const scoreContainer = document.querySelector("h1");
+
+const btnRock = document.querySelector("#btnRock");
+btnRock.addEventListener("click", () => {
+  playerChoice = "rock";
+  playGame();
+});
+const btnPaper = document.querySelector("#btnPaper");
+btnPaper.addEventListener("click", () => {
+  playerChoice = "paper";
+  playGame();
+});
+const btnScissors = document.querySelector("#btnScissors");
+btnScissors.addEventListener("click", () => {
+  playerChoice = "scissors";
+  playGame();
+});
 
 function getComputerChoice() {
   let gameElements = ["rock", "paper", "scissors"];
   return gameElements[Math.floor(Math.random() * gameElements.length)];
 }
 
-function getPlayerChoice() {
-  return prompt(`Enter your choice.
-  Rock
-  Paper
-  Scissors `).toLowerCase();
-}
-
-let roundScore;
 function playRound(computerChoice, playerChoice) {
   if (computerChoice === playerChoice) {
     return (roundScore = "It's a tie.");
@@ -45,23 +59,31 @@ function playRound(computerChoice, playerChoice) {
   }
 }
 
-let computerScore = 0;
-let playerScore = 0;
-function playGame() {
-  for (let index = 0; index < 5; index++) {
-    playRound(getComputerChoice(), getPlayerChoice());
-    console.log(roundScore);
-    console.log(`Player score is ${playerScore}`);
-    console.log(`Computer score is ${computerScore}`);
-    if (index === 4) {
-      if (playerScore > computerScore) {
-        console.log("YOU WON THE GAME");
-      } else if (playerScore < computerScore) {
-        console.log("YOU LOST THE GAME");
-      } else {
-        console.log("IT'S A TIE");
-      }
-    }
-  }
+function showRoundScore(roundScore) {
+  const score = document.createElement("div");
+  score.textContent = roundScore;
+  scoreContainer.appendChild(score);
 }
-console.log(playGame());
+
+function showGameWinner() {
+  const score = document.createElement("div");
+  if (playerScore > computerScore) {
+    score.textContent = "YOU WON THE GAME";
+  } else if (playerScore < computerScore) {
+    score.textContent = "YOU LOST THE GAME";
+  } else {
+    score.textContent = "NOBODY. IT'S A TIE";
+  }
+  scoreContainer.appendChild(score);
+}
+
+function playGame() {
+  playRound(getComputerChoice(), playerChoice);
+  showRoundScore(roundScore);
+  playerScoreContainer.textContent = `Computer score: ${computerScore}`;
+  computerScoreContainer.textContent = `Player score: ${playerScore}`;
+  if (index === 4) {
+    showGameWinner();
+  }
+  index += 1;
+}
